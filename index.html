@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chat Room</title>
+    <script src="https://cdn.socket.io/4.5.0/socket.io.min.js" integrity="sha384-7EyYLQZgWBi67fBtVxw60/OWl1kjsfrPFcaU0pp0nAh+i8FD068QogUvg85Ewy1k" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+</head>
+</head>
+<body>
+    <script type="text/javascript">
+        $(document).ready(function(){
+            var socket = io.connect("http://127.0.0.1:5000");
+
+
+            $("#vote1").on('click',function () {
+                socket.emit('vote',1)
+              })
+
+              $("#vote2").on('click',function () {
+                socket.emit('vote',2)
+              })
+            
+
+        socket.on('vote_results',function(result){
+            // console.log(result.results1)
+            var total_votes=result.results1+result.results2
+            var perc_res1=Math.round(result.results1/total_votes*100)
+            var perc_res2=100-perc_res1
+         $("#results1").css('width',perc_res1+'%')
+         $("#results2").css('width',perc_res2+'%')
+        })
+    });
+
+
+        </script>
+        <button id="vote1" type="submit">Vote 1</button>
+        <button id="vote2" type="submit">Vote 2</button>
+    <div class="progress">
+    <div id="results1" class="progress-bar progress-bar-success" style="width: 50%;"></div>
+    <div id="results2" class="progress-bar progress-bar-warning" style="width: 50%;"></div>
+    
+</div>
+</body>
+
+</html>
